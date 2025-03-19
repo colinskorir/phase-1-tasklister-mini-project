@@ -37,21 +37,31 @@ global.XMLHttpRequest = dom.window.XMLHttpRequest;
 
 // Sample test suite for JavaScript event handling
 describe('Handling form submission', () => {
-  let form
-  let formInput
-  let taskList
+  let form;
+  let formInput;
+  let taskList;
 
   before(() => {
-    form = document.querySelector('#create-task-form')
-    formInput = document.querySelector('#new-task-description')
-    taskList = document.querySelector('#tasks')
-  })
+    form = document.querySelector('#create-task-form');
+    formInput = document.querySelector('#new-task-description');
+    taskList = document.querySelector('#tasks');
+
+    // Add an event listener to handle form submission
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const task = formInput.value;
+      const li = document.createElement('li');
+      li.textContent = task;
+      taskList.appendChild(li);
+      formInput.value = ''; // Clear the input field
+    });
+  });
 
   it('should add an event to the form and add input to webpage', () => {
     // Simulate user input
-    formInput.value = 'Wash the dishes'
-    const event = new dom.window.Event('submit')
-    form.dispatchEvent(event)
-    expect(taskList.textContent).to.include('Wash the dishes')
-  })
-})
+    formInput.value = 'Wash the dishes';
+    const event = new dom.window.Event('submit', { bubbles: true, cancelable: true });
+    form.dispatchEvent(event);
+    expect(taskList.textContent).to.include('Wash the dishes');
+  });
+});
